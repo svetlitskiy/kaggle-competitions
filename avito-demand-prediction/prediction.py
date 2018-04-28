@@ -84,15 +84,57 @@ def read_img_data(zip_file, file_in_zipfile):
 
 
 #user functions
+
+category_tree=dict()
+
 def print_image(index, row):
-    print(index, row['image'], row['parent_category_name'], row['category_name'])
+    #print(index, row['parent_category_name'], row['category_name'], row['param_1'], row['param_2'], row['param_3'])
+    #print(index, row['parent_category_name'], row['category_name'], row['param_1'], row['param_2'], row['param_3'])
+
+    if type(row['parent_category_name']) is str:
+        if row['parent_category_name'] not in category_tree:
+            category_tree[row['parent_category_name']] = dict(count=1)
+        else:
+            category_tree[row['parent_category_name']]['count'] += 1
+
+    if type(row['category_name']) is str:
+        if row['category_name'] not in category_tree[row['parent_category_name']]:
+            category_tree[row['parent_category_name']][row['category_name']] = dict(count=1)
+        else:
+            category_tree[row['parent_category_name']][row['category_name']]['count'] += 1
+
+    if type(row['param_1']) is str:
+        if row['param_1'] not in category_tree[row['parent_category_name']][row['category_name']]:
+            category_tree[row['parent_category_name']][row['category_name']][row['param_1']] = dict(count=1)
+        else:
+            category_tree[row['parent_category_name']][row['category_name']][row['param_1']]['count'] += 1
+
+    if type(row['param_2']) is str:
+        if row['param_2'] not in category_tree[row['parent_category_name']][row['category_name']][row['param_1']]:
+            category_tree[row['parent_category_name']][row['category_name']][row['param_1']][row['param_2']] = dict(count=1)
+        else:
+            category_tree[row['parent_category_name']][row['category_name']][row['param_1']][row['param_2']]['count'] += 1
+
+    if type(row['param_3']) is str:
+        if row['param_3'] not in category_tree[row['parent_category_name']][row['category_name']][row['param_1']][row['param_2']]:
+            category_tree[row['parent_category_name']][row['category_name']][row['param_1']][row['param_2']][row['param_3']] = dict(count=1)
+        else:
+            category_tree[row['parent_category_name']][row['category_name']][row['param_1']][row['param_2']][row['param_3']]['count'] += 1
+
+
+
+
+
     #print(row)
-    if row['image']!='nan':
-        read_img_data(files['test']['jpg'], row['image'])
-        plt.show()
+    #if type(row['image']) is str:
+    #    read_img_data(files['test']['jpg'], row['image'])
+    #    plt.show()
 
 
-read_csv_data(files['test']['data'], 'test.csv', has_probability=False, func=print_image, max_items=4)
+#read_csv_data(files['test']['data'], 'test.csv', has_probability=False, func=print_image, max_items=10)
+read_csv_data(files['train']['data'], 'train.csv', has_probability=True, func=print_image, max_items=0)
+
+print(category_tree)
 
 
 
