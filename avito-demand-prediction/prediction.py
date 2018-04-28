@@ -36,11 +36,11 @@ def read_csv_data(zipFile, pathInZipFile, has_probability=True, func=print, max_
     data_file = data_archive.open(pathInZipFile)
     reader = pd.read_csv(data_file, chunksize=1000)
     for chunk in reader:
-        if counter > 0 and counter >= max_items:
+        if max_items > 0 and counter >= max_items:
             break
         chunk.columns = columns
         for index, row in chunk.iterrows():
-            if counter > 0 and counter >= max_items:
+            if max_items > 0 and counter >= max_items:
                 break
             counter = counter+1
             #if row['deal_probability'] == 1.0:
